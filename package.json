@@ -1,0 +1,11 @@
+{
+    "name": "vibe-wheels-root",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "npx -y concurrently \"npm run dev --prefix client\" \"npm run dev --prefix server\"",
+        "install:all": "npm install --prefix client && npm install --prefix server",
+        "client": "npm run dev --prefix client",
+        "server": "npm run dev --prefix server"
+    }
+}

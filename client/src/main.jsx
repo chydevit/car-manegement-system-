@@ -7,7 +7,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import AdminUsers from "./pages/AdminUsers";
+import AdminConsole from "./pages/AdminConsole";
 import SellerDashboard from "./pages/SellerDashboard";
 import UserBrowse from "./pages/UserBrowse";
 import CarDetails from "./pages/CarDetails";
@@ -41,7 +41,7 @@ createRoot(document.getElementById("root")).render(
                 path="admin"
                 element={
                   <ProtectedRoute roles={["admin"]}>
-                    <AdminUsers />
+                    <AdminConsole />
                   </ProtectedRoute>
                 }
               />

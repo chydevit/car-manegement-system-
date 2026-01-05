@@ -23,4 +23,11 @@ function rolesAllowed(...roles) {
   };
 }
 
-module.exports = { authRequired, rolesAllowed, SECRET };
+function adminRequired(req, res, next) {
+  authRequired(req, res, (err) => {
+    if (err) return next(err);
+    rolesAllowed("admin")(req, res, next);
+  });
+}
+
+module.exports = { authRequired, rolesAllowed, adminRequired, SECRET };

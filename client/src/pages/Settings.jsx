@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Settings as SettingsIcon, Sun, Moon } from "lucide-react";
 import { ThemeContext } from "../context/ThemeContext";
 
 export default function Settings() {
@@ -8,8 +9,8 @@ export default function Settings() {
         <div className="container py-12 animate-fade-in">
             <div className="max-w-2xl mx-auto">
                 <div className="flex items-center gap-6 mb-12">
-                    <div className="w-20 h-20 bg-slate-100 shadow-xl rounded-3xl flex items-center justify-center text-3xl border border-white/50">
-                        ⚙️
+                    <div className="w-20 h-20 bg-slate-100 shadow-xl rounded-3xl flex items-center justify-center text-slate-900 border border-white/50">
+                        <SettingsIcon size={32} />
                     </div>
                     <div>
                         <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight">Settings</h2>
@@ -22,7 +23,7 @@ export default function Settings() {
                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">Appearance</h3>
                     <div className="flex items-center justify-between p-4 rounded-2xl border transition-colors shadow-sm" style={{ backgroundColor: 'var(--bg-gradient)', borderColor: 'var(--border)' }}>
                         <div className="flex items-center gap-4">
-                            <div className="text-2xl">{theme === "light" ? "☀️" : "🌙"}</div>
+                            <div className="text-slate-900">{theme === "light" ? <Sun size={24} /> : <Moon size={24} />}</div>
                             <div>
                                 <div className="font-bold text-slate-900">Dark Mode</div>
                                 <div className="text-xs text-slate-400">Reduce eye strain in low light</div>

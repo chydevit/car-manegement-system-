@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { Car, Folder, Heart, Store, Settings, TrendingUp } from "lucide-react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -107,24 +108,24 @@ export default function Portfolio() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="glass-panel p-8">
                         <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-3">
-                            <span className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center text-sm">🏎️</span>
+                            <span className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600"><Car size={20} /></span>
                             Quick Navigation
                         </h3>
                         <div className="grid grid-cols-2 gap-4">
                             <Link to="/collection" className="p-4 bg-slate-50 rounded-2xl hover:bg-slate-100 transition-all text-center">
-                                <div className="text-2xl mb-2">📂</div>
+                                <div className="text-2xl mb-2 flex justify-center text-indigo-600"><Folder size={24} /></div>
                                 <div className="text-sm font-bold text-slate-900">My Garage</div>
                             </Link>
                             <Link to="/favorites" className="p-4 bg-slate-50 rounded-2xl hover:bg-slate-100 transition-all text-center">
-                                <div className="text-2xl mb-2">❤️</div>
+                                <div className="text-2xl mb-2 flex justify-center text-rose-500"><Heart size={24} /></div>
                                 <div className="text-sm font-bold text-slate-900">Wishlist</div>
                             </Link>
                             <Link to="/" className="p-4 bg-slate-50 rounded-2xl hover:bg-slate-100 transition-all text-center">
-                                <div className="text-2xl mb-2">🏪</div>
+                                <div className="text-2xl mb-2 flex justify-center text-emerald-600"><Store size={24} /></div>
                                 <div className="text-sm font-bold text-slate-900">Market</div>
                             </Link>
                             <Link to="/dashboard" className="p-4 bg-slate-50 rounded-2xl hover:bg-slate-100 transition-all text-center">
-                                <div className="text-2xl mb-2">⚙️</div>
+                                <div className="text-2xl mb-2 flex justify-center text-slate-600"><Settings size={24} /></div>
                                 <div className="text-sm font-bold text-slate-900">Settings</div>
                             </Link>
                         </div>
@@ -132,7 +133,7 @@ export default function Portfolio() {
 
                     <div className="glass-panel p-8">
                         <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-3">
-                            <span className="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center text-sm">📈</span>
+                            <span className="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-600"><TrendingUp size={20} /></span>
                             Performance Summary
                         </h3>
                         <div className="space-y-6">

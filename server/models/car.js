@@ -1,67 +1,133 @@
-// Simple in-memory car store
-const cars = []; // { id, title, price, description, sellerId, status }
-let idSeq = 1;
+const { db } = require('../db');
+const { cars, carImages } = require('../db/schema');
+const { eq, and } = require('drizzle-orm');
 
-function createCar({ title, price, description, sellerId }) {
-  const car = {
-    id: idSeq++,
-    title,
-    price,
-    description,
-    sellerId,
-    status: "available",
-  };
-  cars.push(car);
-  return car;
+// Create a new car listing
+async function createCar({ title, price, description, sellerId, brand, model, year, fuelType, image, status = 'pending' }) {
+  try {
+    const result = await db
+      .insert(cars)
+      .values({
+        title,
+        price: String(price),
+        description,
+        sellerId: Number(sellerId),
+        status,
+        brand,
+        model,
+        year: year ? Number(year) : null,
+        fuelType,
+        image,
+      })
+      .returning();
+
+    return result[0];
+  } catch (error) {
+    console.error('Error creating car:', error);
+    throw error;
+  }
 }
 
-function listCars() {
-  return cars;
+// List all cars with primary images
+async function listCars() {
+  try {
+    const allCars = await db.select().from(cars);
+
+    // Fetch primary image for each car
+    const carsWithImages = await Promise.all(
+      allCars.map(async (car) => {
+        const primaryImage = await db
+          .select()
+          .from(carImages)
+          .where(and(
+            eq(carImages.carId, car.id),
+            eq(carImages.isPrimary, true)
+          ))
+          .limit(1);
+
+        return {
+          ...car,
+          primaryImage: primaryImage[0] || null,
+        };
+      })
+    );
+
+    return carsWithImages;
+  } catch (error) {
+    console.error('Error listing cars:', error);
+    throw error;
+  }
 }
 
-function findById(id) {
-  return cars.find((c) => c.id === Number(id));
+// Find car by ID with all images
+async function findById(id) {
+  try {
+    const result = await db
+      .select()
+      .from(cars)
+      .where(eq(cars.id, Number(id)))
+      .limit(1);
+
+    if (!result[0]) return null;
+
+    // Fetch all images for this car
+    const images = await db
+      .select()
+      .from(carImages)
+      .where(eq(carImages.carId, Number(id)))
+      .orderBy(carImages.displayOrder);
+
+    return {
+      ...result[0],
+      images: images || [],
+    };
+  } catch (error) {
+    console.error('Error finding car by ID:', error);
+    throw error;
+  }
 }
 
-function updateCar(id, patch) {
-  const car = findById(id);
-  if (!car) return null;
-  Object.assign(car, patch);
-  return car;
+// Get car with all images (helper function)
+async function getCarWithImages(id) {
+  return findById(id);
 }
 
-function deleteCar(id) {
-  const index = cars.findIndex((c) => c.id === Number(id));
-  if (index === -1) return false;
-  cars.splice(index, 1);
-  return true;
+// Update car
+async function updateCar(id, patch) {
+  try {
+    const result = await db
+      .update(cars)
+      .set({ ...patch, updatedAt: new Date() })
+      .where(eq(cars.id, Number(id)))
+      .returning();
+
+    return result[0] || null;
+  } catch (error) {
+    console.error('Error updating car:', error);
+    throw error;
+  }
 }
 
-module.exports = { createCar, listCars, findById, updateCar, deleteCar };
+// Delete car
+async function deleteCar(id) {
+  try {
+    const result = await db
+      .delete(cars)
+      .where(eq(cars.id, Number(id)))
+      .returning();
 
-// Seed default cars for testing
-createCar({
-  title: "Aura GT-S Concept",
-  price: 185000,
-  description: "A sleek modern luxury sports car with a silver metallic finish and aerodynamic carbon fiber body. Zero to sixty in 2.8 seconds.",
-  sellerId: 2,
-});
-createCar({
-  title: "Mountain Defender Pro",
-  price: 74900,
-  description: "A rugged modern off-road SUV in deep blue. Equipped with terrain response systems and adventure-ready gear. Perfect for the unknown path.",
-  sellerId: 2,
-});
-createCar({
-  title: "Lunar Lucid Sedan",
-  price: 92000,
-  description: "A futuristic electric sedan in pearl white. Offers autonomous driving capabilities and a minimalist Scandinavian interior. Experience the future of mobility.",
-  sellerId: 2,
-});
+    return result.length > 0;
+  } catch (error) {
+    console.error('Error deleting car:', error);
+    throw error;
+  }
+}
 
-// Map local images to the seeded cars (since IDs are 1, 2, 3)
-const fs = require('fs');
-const carData = listCars();
-if (carData[0]) carData[0].image = "/images/car1.png";
-if (carData[1]) carData[1].image = "/images/car2.png";
-if (carData[2]) carData[2].image = "/images/car3.png";
+module.exports = {
+  createCar,
+  listCars,
+  findById,
+  getCarWithImages,
+  updateCar,
+  deleteCar,
+};

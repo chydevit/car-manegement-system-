@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { Flag, DollarSign } from "lucide-react";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
@@ -94,22 +95,22 @@ export default function Register() {
                                 type="button"
                                 onClick={() => setRole("user")}
                                 className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${role === "user"
-                                        ? "border-indigo-600 bg-indigo-50 text-indigo-600 shadow-md"
-                                        : "border-slate-100 hover:border-slate-200 text-slate-400"
+                                    ? "border-indigo-600 bg-indigo-50 text-indigo-600 shadow-md"
+                                    : "border-slate-100 hover:border-slate-200 text-slate-400"
                                     }`}
                             >
-                                <span className="text-xl">🏁</span>
+                                <span className="text-xl"><Flag size={24} /></span>
                                 <span className="text-[10px] font-bold uppercase tracking-widest">Buy Cars</span>
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setRole("seller")}
                                 className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${role === "seller"
-                                        ? "border-indigo-600 bg-indigo-50 text-indigo-600 shadow-md"
-                                        : "border-slate-100 hover:border-slate-200 text-slate-400"
+                                    ? "border-indigo-600 bg-indigo-50 text-indigo-600 shadow-md"
+                                    : "border-slate-100 hover:border-slate-200 text-slate-400"
                                     }`}
                             >
-                                <span className="text-xl">💰</span>
+                                <span className="text-xl"><DollarSign size={24} /></span>
                                 <span className="text-[10px] font-bold uppercase tracking-widest">Sell Cars</span>
                             </button>
                         </div>

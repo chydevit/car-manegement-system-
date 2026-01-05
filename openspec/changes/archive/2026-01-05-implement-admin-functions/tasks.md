@@ -1,0 +1,22 @@
+# Tasks: Implement Admin Functions
+
+- [x] Task 1: Backend Foundations
+  - [x] 1.1 Update `User` model to include `isActive` and `lastLogin`.
+  - [x] 1.2 Update `Car` model to include `status` (default 'pending') and categorization fields.
+  - [x] 1.3 Implement `admin` middleware for consolidated access control.
+- [x] Task 2: User & Role Management
+  - [x] 2.1 Create backend routes for User CUD and status toggling.
+  - [x] 2.2 Implement `UserTable` component in React.
+  - [x] 2.3 Add "Create Seller/Admin" modals.
+- [x] Task 3: Car & Inventory Management
+  - [x] 3.1 Implement car approval API routes.
+  - [x] 3.2 Create `InventoryTable` with filterable categories.
+  - [x] 3.3 Add approval/rejection UI in the admin view.
+- [x] Task 4: Sales & Reports
+  - [x] 4.1 Implement sales transaction logging model.
+  - [x] 4.2 Create backend report aggregation routes.
+  - [x] 4.3 Build `ReportsView` with dashboard charts.
+- [x] Task 5: System Control & Dashboard
+  - [x] 5.1 Build `AdminDashboard` overview page.
+  - [x] 5.2 Implement system settings persistence (mocked).
+  - [x] 5.3 Final UI polish and responsive testing.

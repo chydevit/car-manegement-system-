@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { CarFront } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -44,7 +45,7 @@ export default function Home() {
           <div key={c.id} className="card-premium group">
             <div className="relative h-64 overflow-hidden">
               <img
-                src={c.image || `https://source.unsplash.com/800x600/?car,${c.id}`}
+                src={c.primaryImage?.imageUrl || c.image || `https://source.unsplash.com/800x600/?car,${c.id}`}
                 alt={c.title}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
@@ -85,7 +86,7 @@ export default function Home() {
 
       {cars.length === 0 && (
         <div className="glass-panel p-20 text-center">
-          <div className="text-6xl mb-6">🚗</div>
+          <div className="mb-6 text-slate-900"><CarFront size={64} strokeWidth={1.5} /></div>
           <h3 className="text-2xl font-bold text-slate-900">No cars found</h3>
           <p className="text-slate-500 mt-2">Checking our garage... Please wait a moment.</p>
         </div>

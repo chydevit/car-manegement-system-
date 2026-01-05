@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Sun, Moon } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { ThemeContext } from "../context/ThemeContext";
@@ -30,7 +31,7 @@ export default function Nav() {
         className="w-10 h-10 flex items-center justify-center rounded-xl transition-all active:scale-95 shadow-sm"
         style={{ backgroundColor: 'var(--glass)', borderColor: 'var(--border)', borderWidth: '1px' }}
       >
-        {theme === "light" ? "🌙" : "☀️"}
+        {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
       </button>
 
       <div className="h-6 w-[1px] bg-slate-200 mx-2 hidden md:block"></div>

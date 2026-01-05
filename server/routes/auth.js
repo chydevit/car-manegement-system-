@@ -7,7 +7,8 @@ const router = express.Router();
 
 router.post("/register", async (req, res) => {
   const { name, email, password, role } = req.body;
-  if (findByEmail(email)) return res.status(400).json({ error: "Email used" });
+  const existing = await findByEmail(email);
+  if (existing) return res.status(400).json({ error: "Email used" });
   const user = await createUser({ name, email, password, role });
   const token = jwt.sign(
     { id: user.id, role: user.role, email: user.email },

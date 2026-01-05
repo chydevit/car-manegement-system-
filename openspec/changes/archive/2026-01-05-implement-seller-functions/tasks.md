@@ -1,0 +1,22 @@
+# Tasks: Implement Seller Functions
+
+- [x] Task 1: Data Infrastructure
+  - [x] 1.1 Create `inquiry.js` model with in-memory store.
+  - [x] 1.2 Create `order.js` model with in-memory store.
+  - [x] 1.3 Update `car.js` model to allow `reserved` and `sold` statuses.
+- [x] Task 2: Car Management & Status Control
+  - [x] 2.1 Implement seller-specific car update routes.
+  - [x] 2.2 Add "Mark as Sold" and "Reserve" actions to `SellerDashboard`.
+  - [x] 2.3 Ensure status changes persist in the backend.
+- [x] Task 3: Lead Management (Customer Engagement)
+  - [x] 3.1 Implement inquiry submission API for public users.
+  - [x] 3.2 Implement `GET /api/seller/inquiries` and response PATCH.
+  - [x] 3.3 Create `LeadDashboard` UI in the seller view.
+- [x] Task 4: Sales Processing Workflow
+  - [x] 4.1 Implement Sales Order CUD routes.
+  - [x] 4.2 Build `SalesOrderForm` for converting car to "Sold" state.
+  - [x] 4.3 Add basic document metadata management to orders.
+- [x] Task 5: Metrics & Refinement
+  - [x] 5.1 Implement `GET /api/seller/reports` aggregation.
+  - [x] 5.2 Build personal Performance view in `SellerDashboard`.
+  - [x] 5.3 UX Polish and documentation update.

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { Heart, HeartOff } from "lucide-react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -44,7 +45,7 @@ export default function Favorites() {
         <div className="container py-12 animate-fade-in">
             <div className="flex items-center gap-6 mb-12">
                 <div className="w-20 h-20 bg-rose-50 shadow-xl rounded-3xl flex items-center justify-center text-3xl border border-rose-100">
-                    ❤️
+                    <Heart size={32} />
                 </div>
                 <div>
                     <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight">
@@ -59,7 +60,7 @@ export default function Favorites() {
                     <Link key={c.id} to={`/cars/${c.id}`} className="card-premium group">
                         <div className="relative h-48 overflow-hidden">
                             <img
-                                src={c.image || `https://source.unsplash.com/800x600/?car,${c.id}`}
+                                src={c.primaryImage?.imageUrl || c.image || `https://source.unsplash.com/800x600/?car,${c.id}`}
                                 alt={c.title}
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                             />
@@ -87,7 +88,7 @@ export default function Favorites() {
 
             {favorites.length === 0 && (
                 <div className="glass-panel p-20 text-center">
-                    <div className="text-6xl mb-6">💖</div>
+                    <HeartOff size={64} className="mx-auto mb-6 text-slate-300" />
                     <h3 className="text-2xl font-bold text-slate-900">No favorites yet</h3>
                     <p className="text-slate-500 mt-2 mb-8">Click the heart icon on any vehicle to save it here.</p>
                     <Link to="/" className="btn-premium py-4 bg-rose-600 hover:bg-rose-700 hover:shadow-rose-100">Find Something Special</Link>

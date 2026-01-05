@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1767581242029,
+      "tag": "0000_spicy_hairball",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1767584093862,
+      "tag": "0001_wet_tenebrous",
+      "breakpoints": true
+    }
+  ]
+}

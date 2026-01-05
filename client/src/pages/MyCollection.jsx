@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { Key, Ghost } from "lucide-react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -45,7 +46,7 @@ export default function MyCollection() {
         <div className="container py-12 animate-fade-in">
             <div className="flex items-center gap-6 mb-12">
                 <div className="w-20 h-20 bg-emerald-50 shadow-xl rounded-3xl flex items-center justify-center text-3xl border border-emerald-100">
-                    🔑
+                    <Key size={32} />
                 </div>
                 <div>
                     <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight">
@@ -60,7 +61,7 @@ export default function MyCollection() {
                     <Link key={c.id} to={`/cars/${c.id}`} className="card-premium group">
                         <div className="relative h-48 overflow-hidden">
                             <img
-                                src={c.image || `https://source.unsplash.com/800x600/?car,${c.id}`}
+                                src={c.primaryImage?.imageUrl || c.image || `https://source.unsplash.com/800x600/?car,${c.id}`}
                                 alt={c.title}
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                             />
@@ -86,7 +87,7 @@ export default function MyCollection() {
 
             {purchases.length === 0 && (
                 <div className="glass-panel p-20 text-center">
-                    <div className="text-6xl mb-6">🏜️</div>
+                    <Ghost size={64} className="mx-auto mb-6 text-slate-300" />
                     <h3 className="text-2xl font-bold text-slate-900">Your garage is empty</h3>
                     <p className="text-slate-500 mt-2 mb-8">Start your collection by purchasing your first vehicle.</p>
                     <Link to="/" className="btn-premium">Browse Marketplace</Link>

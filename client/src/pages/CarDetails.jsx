@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import { ReviewForm, ReviewList } from "../components/Reviews";
+import ImageGallery from "../components/ImageGallery";
 
 export default function CarDetails() {
     const { id } = useParams();
@@ -13,6 +15,47 @@ export default function CarDetails() {
     const [isPaying, setIsPaying] = useState(false);
     const [order, setOrder] = useState(null);
     const [isFavorite, setIsFavorite] = useState(false);
+    const [reviews, setReviews] = useState([]);
+
+    // Inquiry State
+    const [inquiryType, setInquiryType] = useState('general');
+    const [inquiryMsg, setInquiryMsg] = useState('');
+    const [requestedDate, setRequestedDate] = useState('');
+    const [isInquiring, setIsInquiring] = useState(false);
+
+    const fetchReviews = async () => {
+        try {
+            const r = await axios.get(`http://localhost:4000/api/reviews/car/${id}`);
+            setReviews(r.data);
+        } catch (err) {
+            console.error("Failed to fetch reviews", err);
+        }
+    };
+
+    const submitInquiry = async () => {
+        const token = localStorage.getItem("token");
+        if (!token) return navigate("/login");
+        if (!inquiryMsg.trim()) return alert("Please enter a message");
+
+        setIsInquiring(true);
+        try {
+            await axios.post("http://localhost:4000/api/inquiries", {
+                carId: id,
+                message: inquiryMsg,
+                type: inquiryType,
+                requestedDate: inquiryType === 'test_drive' ? requestedDate : null
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            alert("Inquiry sent successfully!");
+            setInquiryMsg('');
+            setRequestedDate('');
+        } catch (err) {
+            alert("Failed to send inquiry");
+        } finally {
+            setIsInquiring(false);
+        }
+    };
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -26,6 +69,9 @@ export default function CarDetails() {
             .catch(() => {
                 setLoading(false);
             });
+
+        // Fetch reviews
+        fetchReviews();
 
         // Check if favorite
         if (token) {
@@ -119,6 +165,10 @@ export default function CarDetails() {
         );
     }
 
+    const displayImages = (car.images && car.images.length > 0)
+        ? car.images
+        : (car.image ? [{ imageUrl: car.image, isPrimary: true }] : []);
+
     return (
         <div className="container py-12 animate-fade-in">
             <button
@@ -132,12 +182,8 @@ export default function CarDetails() {
             </button>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div className="card-premium p-0 h-[500px]">
-                    <img
-                        src={car.image || `https://source.unsplash.com/1200x800/?car,${car.id}`}
-                        alt={car.title}
-                        className="w-full h-full object-cover"
-                    />
+                <div className="card-premium p-0 border-0 bg-transparent shadow-none">
+                    <ImageGallery images={displayImages} altTitle={car.title} />
                 </div>
 
                 <div className="flex flex-col justify-center">
@@ -196,6 +242,47 @@ export default function CarDetails() {
                         </button>
                     </div>
 
+                    <div className="glass-panel p-6 mb-4">
+                        <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-4">Inquire About This Vehicle</h3>
+                        <div className="space-y-4">
+                            <div className="flex gap-4">
+                                <button
+                                    onClick={() => setInquiryType('general')}
+                                    className={`flex-1 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${inquiryType === 'general' ? 'bg-indigo-600 text-white' : 'bg-slate-50 text-slate-400 hover:bg-slate-100'}`}
+                                >
+                                    General Info
+                                </button>
+                                <button
+                                    onClick={() => setInquiryType('test_drive')}
+                                    className={`flex-1 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${inquiryType === 'test_drive' ? 'bg-indigo-600 text-white' : 'bg-slate-50 text-slate-400 hover:bg-slate-100'}`}
+                                >
+                                    Test Drive
+                                </button>
+                            </div>
+                            {inquiryType === 'test_drive' && (
+                                <input
+                                    type="date"
+                                    className="w-full input-premium text-xs"
+                                    value={requestedDate}
+                                    onChange={(e) => setRequestedDate(e.target.value)}
+                                />
+                            )}
+                            <textarea
+                                className="w-full input-premium h-24 resize-none text-sm"
+                                placeholder="Message to seller..."
+                                value={inquiryMsg}
+                                onChange={(e) => setInquiryMsg(e.target.value)}
+                            />
+                            <button
+                                onClick={submitInquiry}
+                                disabled={isInquiring}
+                                className="w-full py-3 bg-slate-900 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-all flex items-center justify-center gap-2"
+                            >
+                                {isInquiring ? <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> : "Send Message"}
+                            </button>
+                        </div>
+                    </div>
+
                     {(user && (user.role === 'admin' || user.id === car.sellerId)) && (
                         <button
                             onClick={delistCar}
@@ -204,6 +291,33 @@ export default function CarDetails() {
                             Remove Listing from Market
                         </button>
                     )}
+                </div>
+            </div>
+
+            {/* Social Engagement Section */}
+            <div className="mt-20 border-t border-slate-100 pt-12">
+                <div className="max-w-4xl">
+                    <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight mb-8">Community Reviews</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                        <div className="md:col-span-2">
+                            <ReviewList reviews={reviews} />
+                        </div>
+                        <div>
+                            {user ? (
+                                <ReviewForm carId={id} onReviewAdded={fetchReviews} />
+                            ) : (
+                                <div className="glass-panel p-6 text-center">
+                                    <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-4">Want to share your thoughts?</p>
+                                    <button
+                                        onClick={() => navigate("/login")}
+                                        className="btn-premium w-full py-3 text-[10px]"
+                                    >
+                                        Login to Review
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
 
